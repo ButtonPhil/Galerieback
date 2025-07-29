@@ -9,18 +9,66 @@ export const clientGet = () => {
 
 }
 
-export const register = (nom, prenom, email, cryptPass, adresse, pays) => {
+export const register = async (client) => {
 
     const createClient = "INSERT INTO Clients (nom, prenom, email, password, adresse, pays, role) value (?,?,?,?,?,?,?)";
 
-    return bdd.query(createClient, [nom, prenom, email, cryptPass, adresse, pays, role]);
+    return bdd.query(createClient, [client.nom, client.prenom, client.email, client.cryptPass, client.adresse, client.pays, client.role]);
 
 }
 
 export const login = (email) => {
 
-    const loginClient = "SELECT idClient, nom, prenom, email, adresse, pays, role from Clients where email = ?;";
+    const loginClient = "SELECT idClient, nom, prenom, email, password, adresse, pays, role from Clients where email = ?";
 
-    return bdd.query(loginClient[email]);
+    return bdd.query(loginClient, [email]);
     
 }
+
+export const ProfileClient = (profileId) => {
+    
+    const getProfile = "SELECT idClient, nom, prenom, email, password, adresse, pays, role from Clients where idClient = ?;";
+
+    // Exécute la requête de sélection avec l'ID utilisateur fourni
+    return bdd.query(getProfile, [profileId]);
+
+}
+
+export const updateEmail = (email, profileId) => {
+
+    const updateEmail = "UPDATE Clients SET email = ? WHERE idClient = ?;";
+    
+    return bdd.query(updateEmail, [email, profileId]);
+
+}
+
+export const getPassword = (profileId) => {
+
+    const selectPassword = "SELECT password FROM Clients WHERE idClient = ?;";
+
+    return bdd.query(selectPassword, [profileId])
+
+}
+
+export const updatePassword = (cryptedNewPassword, profileId) => {
+     // préparation de la requete de mise à jour
+    const updatePassword = "UPDATE Clients SET password = ? WHERE idClient = ?;";
+
+    // Exécute la requête de mise à jour avec le nouveau mot de passe et l'ID utilisateur
+    return bdd.query(updatePassword, [cryptedNewPassword, profileId]);
+
+}
+
+export const clientDelete = (profileId) => {
+
+    const deleteClient = "DELETE FROM Clients WHERE idClient = ?";
+
+    return bdd.query(deleteClient, [profileId]);
+
+}
+
+// export const mdpOublie = async (email) => {
+//     const checkEmail = "SELECT id, login, email FROM utilisateur WHERE email = ?";
+//     const [result] = await bdd.query(checkEmail, [email]);
+//     return result;
+// }

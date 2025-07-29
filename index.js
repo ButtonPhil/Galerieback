@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import bdd from './configuration/bdd.js';
-
+import clientRoute from './routes/clientRoute.js'
 
 
 
@@ -13,7 +13,7 @@ app.use(express.json());
 
 dotenv.config();
 
-// app.use('/');
+app.use('/galerie', clientRoute);
 
 app.listen(process.env.PORT, () => {
 

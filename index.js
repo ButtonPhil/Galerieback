@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import bdd from './configuration/bdd.js';
 import clientRoute from './routes/clientRoute.js'
-
+import articleRoute from './routes/articleRoute.js'
 
 
 const app = express();
@@ -13,7 +13,7 @@ app.use(express.json());
 
 dotenv.config();
 
-app.use('/galerie', clientRoute);
+app.use('/galerie', clientRoute, articleRoute);
 
 app.listen(process.env.PORT, () => {
 

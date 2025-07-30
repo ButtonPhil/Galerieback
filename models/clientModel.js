@@ -19,7 +19,7 @@ export const register = async (client) => {
 
 export const login = (email) => {
 
-    const loginClient = "SELECT idClient, nom, prenom, email, password, adresse, pays, role from Clients where email = ?";
+    const loginClient = "SELECT idClient, nom, prenom, email, password, adresse, pays, role from Clients where email = ?;";
 
     return bdd.query(loginClient, [email]);
     

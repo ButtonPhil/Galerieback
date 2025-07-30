@@ -39,7 +39,7 @@ export const register = async (req, res) => {
         // console.log(cryptPass);
 
         const clientData = { nom, prenom, email, cryptPass, adresse, pays, role };
-        console.log(clientData);
+        // console.log(clientData);
 
         const client = await clientModel.register(clientData);
 
@@ -138,11 +138,11 @@ export const updateEmail = async (req, res) => {
 
     // récupération de l'id de l'utilisateur à partir du token
     const profileId = req.user.idClient;
-    console.log(profileId);
+    // console.log(profileId);
 
     // récupération des informations à mettre à jour
     const email = req.body.email;
-    console.log(email);
+    // console.log(email);
 
     try {
 
@@ -168,7 +168,7 @@ export const updatePassword = async (req, res) => {
 
     // récupération des informations à mettre à jour
     const { oldPassword, newPassword } = req.body;
-    console.log(oldPassword);
+    // console.log(oldPassword);
 
     try {
 

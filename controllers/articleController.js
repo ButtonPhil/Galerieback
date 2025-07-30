@@ -70,7 +70,7 @@ export const searchCategorie = async (req, res) => {
     try {
         
         await articleModel.categorieSearch(nomCategorie);
-        console.log(nomCategorie);
+        // console.log(nomCategorie);
 
         res.status(200).json({ message: "Type trouver" });
 

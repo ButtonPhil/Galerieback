@@ -121,3 +121,11 @@ export const articleDelete = (idArticle) => {
     return bdd.query(deleteArticle, [idArticle]);
 
 }
+
+export const porteuseDelete = (idArticle) => {
+
+    const deletePorteuse = "DELETE FROM Porteuse WHERE articleId = ?";
+
+    return bdd.query(deletePorteuse, [idArticle]);
+
+}

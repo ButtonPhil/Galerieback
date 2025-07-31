@@ -101,9 +101,9 @@ export const registerArticle = async (req, res) => {
 
             // Envoie des donnees Image
             const imgId = await articleModel.registerImage(image);
-            res.status(200).json({ artId, imgId });
+            res.status(200).json({artId, imgId });
 
-            await articleModel.registerProteuse(artId, imgId);
+            await articleModel.registerProteuse( artId, imgId);
             res.status(200)
             
         } else {
@@ -173,14 +173,13 @@ export const updateArticle = async (req, res) => {
 
 export const deleteArticle = async (req, res) => {
 
-    const idArticle = req.params.idArticle
-
-    // console.log(profileId)
+    const idArticle = req.params.idArticle;
 
     try {
 
+        await articleModel.porteuseDelete(idArticle);
         await articleModel.articleDelete(idArticle);
-        res.status(200).json({ message: "Suppression compte" });
+        res.status(200).json({ message: "Suppression de l'article" });
 
     } catch (error) {
 

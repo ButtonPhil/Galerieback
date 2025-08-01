@@ -27,7 +27,7 @@ export const login = (email) => {
 
 export const ProfileClient = (profileId) => {
     
-    const getProfile = "SELECT idClient, nom, prenom, email, password, adresse, pays, role from Clients where idClient = ?;";
+    const getProfile = "SELECT idClient, nom, prenom, email, password, adresse, pays, imageClient from Clients where idClient = ?;";
 
     // Exécute la requête de sélection avec l'ID utilisateur fourni
     return bdd.query(getProfile, [profileId]);

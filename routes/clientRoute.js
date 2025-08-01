@@ -11,7 +11,7 @@ router.get('/client', checkToken, clientGet);
 
 router.post('/createClient', register);
 
-router.get('/login', login);
+router.post('/login', login);
 
 router.get('/profile', checkToken, getProfile);
 

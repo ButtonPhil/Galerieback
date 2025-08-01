@@ -13,7 +13,7 @@ app.use(express.json());
 
 dotenv.config();
 
-app.use('/galerie', clientRoute, articleRoute);
+app.use('/Eternelles', clientRoute, articleRoute);
 
 app.listen(process.env.PORT, () => {
 

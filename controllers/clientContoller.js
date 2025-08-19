@@ -110,7 +110,7 @@ export const getProfile = async (req, res) => {
     // récupération de l'id de l'utilisateur à partir du token grace à user
     // le token est vérifié par le middleware checkToken
     const profileId = req.user.idClient
-    // console.log(req.user);
+    console.log(req.user);
 
     try {
 

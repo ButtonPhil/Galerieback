@@ -51,6 +51,8 @@ export const getType = async (req, res) => {
 
         })
 
+        console.log(type);
+
     } catch (error) {
 
         res.status(400).json({ message: "Erreur liste des type", error })
@@ -83,7 +85,7 @@ export const searchCategorie = async (req, res) => {
 export const registerArticle = async (req, res) => {
 
     const { nomArticle, prix, dimension, description, categorieId } = req.body;
-    
+
     const role = req.user.Role;
 
     const { image } = req.body;
@@ -95,17 +97,17 @@ export const registerArticle = async (req, res) => {
             //regroupement des donnees Article
             const articleData = { nomArticle, prix, dimension, description, categorieId }
             // console.log(articleData);
-            
+
             // Envoie des donnees Article
             const artId = await articleModel.registerArticle(articleData);
 
             // Envoie des donnees Image
             const imgId = await articleModel.registerImage(image);
-            res.status(200).json({artId, imgId });
+            res.status(200).json({ artId, imgId });
 
-            await articleModel.registerProteuse( artId, imgId);
+            await articleModel.registerProteuse(artId, imgId);
             res.status(200)
-            
+
         } else {
 
             res.status(403).json({ message: "Erreur lors de la creation de article", error })
@@ -122,7 +124,7 @@ export const registerArticle = async (req, res) => {
 
 export const getArticle = async (req, res) => {
 
-      try {
+    try {
 
         const [result] = await articleModel.articleGet();
 
@@ -150,14 +152,14 @@ export const updateArticle = async (req, res) => {
     const { image, idImage } = req.body;
 
     try {
-        
-        const modifyData =  { nomArticle, prix, dimension, description, idArticle}
+
+        const modifyData = { nomArticle, prix, dimension, description, idArticle }
         const modifyImage = { image, idImage }
         console.log(modifyData);
-        
+
 
         await articleModel.articleUpdate(modifyData);
-        await articleModel.imageUpdate( modifyImage);
+        await articleModel.imageUpdate(modifyImage);
         res.status(200).json({ message: " Modification reussi " });
 
 
@@ -165,9 +167,9 @@ export const updateArticle = async (req, res) => {
 
         res.status(400).json({ message: "Erreur modification ", error })
         console.log(error);
-        
+
     }
-    
+
 
 }
 
@@ -188,6 +190,27 @@ export const deleteArticle = async (req, res) => {
 
     }
 
+}
+
+export const carouselImg = async (req, res) => {
+
+    try {
+
+        const [result] = await articleModel.getCarouselImg();
+
+        res.status(200)
+        res.json({
+
+            message: "Liste des articles",
+            carouselImg: result
+
+        })
+
+    } catch (error) {
+
+        res.status(400).json({ message: "Erreur recuperation image carousel", error })
+        console.log(error);
+    }
 }
 
 

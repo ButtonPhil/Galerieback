@@ -1,6 +1,6 @@
 import express from 'express';
 import checkToken from "../middlewares/auth.js";
-import { deleteArticle, getArticle, getType, registerArticle, registerType, searchCategorie, updateArticle } from '../controllers/articleController.js';
+import { carouselImg, deleteArticle, getArticle, getType, registerArticle, registerType, searchCategorie, updateArticle } from '../controllers/articleController.js';
 
 
 
@@ -25,5 +25,7 @@ router.get('/article', checkToken, getArticle)
 router.put('/article/update/:idArticle', checkToken, updateArticle)
 
 router.delete('/delete/:idArticle', checkToken, deleteArticle)
+
+router.get('/carouselImg' , checkToken, carouselImg)
 
 export default router;

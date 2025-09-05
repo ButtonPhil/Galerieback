@@ -34,6 +34,15 @@ export const ProfileClient = (profileId) => {
 
 }
 
+export const ClientProfile = (id) => {
+    
+    const getProfile = "SELECT idClient, nom, prenom, email, password, adresse, pays, imageClient from Clients where idClient = ?;";
+
+    // Exécute la requête de sélection avec l'ID utilisateur fourni
+    return bdd.query(getProfile, [id]);
+
+}
+
 export const updateEmail = (email, profileId) => {
 
     const updateEmail = "UPDATE Clients SET email = ? WHERE idClient = ?;";

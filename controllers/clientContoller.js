@@ -134,6 +134,33 @@ export const getProfile = async (req, res) => {
 
 }
 
+export const getProfileClient = async (req, res) => {
+
+    const id = req.params.idClient
+    console.log(req.params.idClient);
+    
+    try {
+
+        const [result] = await clientModel.ClientProfile(id);
+
+        if (result.length > 0) {
+
+            res.status(200).json(result[0]);
+
+        } else {
+
+            res.status(404).json({ message: "utilisateur non trouvé" });
+        }
+
+    } catch (error) {
+
+        res.status(500).json({ message: "erreur lors de la récupération du profil", error });
+        console.log(error);
+
+    }
+
+}
+
 export const updateEmail = async (req, res) => {
 
     // récupération de l'id de l'utilisateur à partir du token

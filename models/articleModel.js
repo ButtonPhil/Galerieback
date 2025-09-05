@@ -129,3 +129,11 @@ export const porteuseDelete = (idArticle) => {
     return bdd.query(deletePorteuse, [idArticle]);
 
 }
+
+export const getCarouselImg = () => {
+
+    const carouselImg = " SELECT idImage, image, description , nomArticle from image JOIN Porteuse on imageId = idImage JOIN Article on idArticle = articleId ";
+
+    return bdd.query(carouselImg)
+
+}

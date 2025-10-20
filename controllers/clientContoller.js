@@ -56,10 +56,7 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
 
-    // console.log(req.body);
-
     const { email, password } = req.body;
-
 
     try {
 
@@ -79,7 +76,7 @@ export const login = async (req, res) => {
             if (checkPassword == true) {
 
                 // création du token
-                const token = jwt.sign({ idClient: clientData.idClient, nom: clientData.nom, Role: clientData.role }, process.env.SECRET_KEY, { expiresIn: "6h" });
+                const token = jwt.sign({ idClient: clientData.idClient, nom: clientData.nom, Role: clientData.role }, process.env.SECRET_KEY, { expiresIn: "3h" });
 
                 res.status(200).json({ message: "Connexion autorisé", token });
                 console.log(token);

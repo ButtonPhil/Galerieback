@@ -3,8 +3,6 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import * as articleModel from '../models/articleModel.js';
 
-
-
 dotenv.config();
 
 export const registerType = async (req, res) => {

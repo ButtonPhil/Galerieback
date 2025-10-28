@@ -27,8 +27,6 @@ export const clientGet = async (req, res) => {
     }
 
 }
-
-
 export const register = async (req, res) => {
 
     const { nom, prenom, email, password, adresse, pays, role } = req.body;
@@ -52,8 +50,6 @@ export const register = async (req, res) => {
     }
 
 }
-
-
 export const login = async (req, res) => {
 
     const { email, password } = req.body;
@@ -100,17 +96,15 @@ export const login = async (req, res) => {
 
     }
 }
-
 export const getProfile = async (req, res) => {
 
     // récupération de l'id de l'utilisateur à partir du token grace à user
     // le token est vérifié par le middleware checkToken
-    const profileId = req.user.idClient
-    console.log(req.user);
+    const idClient = req.user.idClient
 
     try {
 
-        const [result] = await clientModel.ProfileClient(profileId);
+        const [result] = await clientModel.getProfile(idClient);
 
         if (result.length > 0) {
 
@@ -129,38 +123,10 @@ export const getProfile = async (req, res) => {
     }
 
 }
-
-export const getProfileClient = async (req, res) => {
-
-    const id = req.params.idClient
-    console.log(req.params.idClient);
-    
-    try {
-
-        const [result] = await clientModel.ClientProfile(id);
-
-        if (result.length > 0) {
-
-            res.status(200).json(result[0]);
-
-        } else {
-
-            res.status(404).json({ message: "utilisateur non trouvé" });
-        }
-
-    } catch (error) {
-
-        res.status(500).json({ message: "erreur lors de la récupération du profil", error });
-        console.log(error);
-
-    }
-
-}
-
 export const updateEmail = async (req, res) => {
 
     // récupération de l'id de l'utilisateur à partir du token
-    const profileId = req.user.idClient;
+    const idClient = req.user.idClient;
     // console.log(profileId);
 
     // récupération des informations à mettre à jour
@@ -170,7 +136,7 @@ export const updateEmail = async (req, res) => {
     try {
 
         // utilisation de la connexion bdd pour executer la requete
-        await clientModel.updateEmail(email, profileId);
+        await clientModel.updateEmail(email, idClient);
         // envoi de la réponse
         res.status(200).json({ message: "Email mis à jour" });
 
@@ -182,7 +148,32 @@ export const updateEmail = async (req, res) => {
     }
 
 }
+export const updateInfoProfile = async (req, res) => {
 
+    const profile = req.body;
+    console.log(profile);
+    
+
+    try {
+
+        const idClient = profile.idClient;
+        const nom = profile.nom;
+        const prenom = profile.prenom;
+        const adresse = profile.adresse;
+        const pays = profile.pays;
+
+
+        await clientModel.updateInfoProfile(idClient, nom, prenom, adresse, pays)
+        res.status(200).json({ message: "profil mis à jour" });
+
+    } catch (error) {
+
+        res.status(500).json({ message: "erreur  de la mise à jour du profil" });
+        console.error("Erreur lors de la mise à jour du profil", error);
+
+    }
+
+}
 export const updatePassword = async (req, res) => {
 
     // récupération de l'id de l'utilisateur à partir du token
@@ -235,7 +226,62 @@ export const updatePassword = async (req, res) => {
 
     }
 }
+export const mdpOublie = async (req, res) => {
+    const { email } = req.body;
 
+    try {
+        const utilisateur = await modelUtilisateur.mdpOublie(email);
+
+        if (utilisateur.length === 0) {
+            return res.status(404).json({ message: "Email non trouvé" });
+        }
+
+        const tokenReset = jwt.sign({ id: utilisateur[0].id }, process.env.SECRET_KEY, { expiresIn: '1h' });
+
+        transporter.sendMail(mailMdpOublie(email, utilisateur[0].login, tokenReset), (error, info) => {
+            if (error) {
+                return console.log("Erreur envoi mail :", error);
+            }
+            console.log("Mail envoyé :", info.response);
+        });
+
+
+        // Logique pour envoyer un email de réinitialisation de mot de passe
+        // ...
+
+        res.status(200).json({ message: "Email de réinitialisation envoyé" });
+
+    } catch (error) {
+        console.error("Erreur lors de la récupération du mot de passe :", error);
+        res.status(500).json({ message: "Erreur serveur" });
+    }
+};
+export const getProfileClient = async (req, res) => {
+
+    const id = req.params.idClient
+    console.log(req.params.idClient);
+    
+    try {
+
+        const [result] = await clientModel.ClientProfile(id);
+
+        if (result.length > 0) {
+
+            res.status(200).json(result[0]);
+
+        } else {
+
+            res.status(404).json({ message: "utilisateur non trouvé" });
+        }
+
+    } catch (error) {
+
+        res.status(500).json({ message: "erreur lors de la récupération du profil", error });
+        console.log(error);
+
+    }
+
+}
 export const deleteClient = async (req, res) => {
 
     const profileId = req.params.idClient
@@ -255,35 +301,3 @@ export const deleteClient = async (req, res) => {
     }
 
 }
-
-
-// export const mdpOublie = async (req, res) => {
-//     const { email } = req.body;
-
-//     try {
-//         const utilisateur = await modelUtilisateur.mdpOublie(email);
-
-//         if (utilisateur.length === 0) {
-//             return res.status(404).json({ message: "Email non trouvé" });
-//         }
-
-//         const tokenReset = jwt.sign({ id: utilisateur[0].id }, process.env.SECRET_KEY, { expiresIn: '1h' });
-
-//         transporter.sendMail(mailMdpOublie(email, utilisateur[0].login, tokenReset), (error, info) => {
-//             if (error) {
-//                 return console.log("Erreur envoi mail :", error);
-//             }
-//             console.log("Mail envoyé :", info.response);
-//         });
-
-
-//         // Logique pour envoyer un email de réinitialisation de mot de passe
-//         // ...
-
-//         res.status(200).json({ message: "Email de réinitialisation envoyé" });
-
-//     } catch (error) {
-//         console.error("Erreur lors de la récupération du mot de passe :", error);
-//         res.status(500).json({ message: "Erreur serveur" });
-//     }
-// };

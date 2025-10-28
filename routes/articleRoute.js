@@ -26,6 +26,7 @@ router.put('/article/update/:idArticle', checkToken, articleController.updateArt
 router.post('/gallery', upload.single('img'), (req, res) => {articleController.addGallery(req, res)});
 
 router.get('/gallery' , (req,res) => { articleController.getGallery(req, res)});
+router.get('/gallery/:image', (req,res) => { articleController.getGalleryImage(req, res)});
 
 router.delete('/deleteImage/:idImage', checkToken, articleController.deleteImage)
 

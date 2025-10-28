@@ -203,8 +203,8 @@ export const addGallery = async (req, res) => {
 
     try {
         const img = req.body;
-        console.log("titi",req.body);
-        
+        console.log("titi", req.body);
+
         articleModel.addGallery(img);
         res.send("Ajouté")
     } catch (error) {
@@ -213,27 +213,49 @@ export const addGallery = async (req, res) => {
     }
 }
 
-export const getGallery = async (req,res) => {
+export const getGallery = async (req, res) => {
     try {
-        const image = req.params.image;
-        res.sendFile(path.join(__dirname, '../img/'+req.params.type+image))
+
+        const [result] = await articleModel.getGallery();
+
+        res.status(200)
+        res.json({
+
+            message: "info articles",
+            image: result
+
+        })
+
     } catch (error) {
         console.log(error);
-        
+
         res.send(error)
-    }   
+    }
 }
 
+export const getGalleryImage = async (req, res) => {
+
+    try {
+
+        const {image} = req.params
+        console.log(image);
+        res.sendFile(path.join(__dirname, '../img/'+image))
+        
+        
+    } catch (error) {
+        
+    }
+}
 export const deleteImage = async (req, res) => {
 
     const idImage = req.params.idImage
 
     try {
-        
+
         await articleModel.imageDelete(idImage)
 
     } catch (error) {
-        
+
         console.log(error);
     }
 }

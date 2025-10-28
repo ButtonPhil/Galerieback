@@ -2,6 +2,8 @@ import dotenv from "dotenv";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import * as articleModel from '../models/articleModel.js';
+import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config();
 
@@ -124,12 +126,14 @@ export const getArticle = async (req, res) => {
 
     try {
 
-        const [result] = await articleModel.articleGet();
+        const idImage = req.params.idImage;
+
+        const [result] = await articleModel.articleGet(idImage);
 
         res.status(200)
         res.json({
 
-            message: "Liste des articles",
+            message: "info articles",
             article: result
 
         })
@@ -171,46 +175,68 @@ export const updateArticle = async (req, res) => {
 
 }
 
-export const deleteArticle = async (req, res) => {
+// export const deleteArticle = async (req, res) => {
 
-    const idArticle = req.params.idArticle;
+//     const idArticle = req.params.idArticle;
+//     const 
+
+//     try {
+
+//         await articleModel.porteuseDelete(idArticle);
+//         await articleModel.articleDelete(idArticle);
+//         await articleModel.imageDelete(idImage)
+//         res.status(200).json({ message: "Suppression de l'article" });
+
+//     } catch (error) {
+
+//         res.status(500).json({ message: "erreur lors de la suppression", error });
+//         console.log(error);
+
+//     }
+
+// }
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export const addGallery = async (req, res) => {
 
     try {
-
-        await articleModel.porteuseDelete(idArticle);
-        await articleModel.articleDelete(idArticle);
-        res.status(200).json({ message: "Suppression de l'article" });
-
+        const img = req.body;
+        console.log("titi",req.body);
+        
+        articleModel.addGallery(img);
+        res.send("Ajouté")
     } catch (error) {
-
-        res.status(500).json({ message: "erreur lors de la suppression", error });
-        console.log(error);
-
-    }
-
-}
-
-export const carouselImg = async (req, res) => {
-
-    try {
-
-        const [result] = await articleModel.getCarouselImg();
-
-        res.status(200)
-        res.json({
-
-            message: "Liste des articles",
-            carouselImg: result
-
-        })
-
-    } catch (error) {
-
-        res.status(400).json({ message: "Erreur recuperation image carousel", error })
-        console.log(error);
+        console.error(error);
+        res.send('error')
     }
 }
 
+export const getGallery = async (req,res) => {
+    try {
+        const image = req.params.image;
+        res.sendFile(path.join(__dirname, '../img/'+req.params.type+image))
+    } catch (error) {
+        console.log(error);
+        
+        res.send(error)
+    }   
+}
+
+export const deleteImage = async (req, res) => {
+
+    const idImage = req.params.idImage
+
+    try {
+        
+        await articleModel.imageDelete(idImage)
+
+    } catch (error) {
+        
+        console.log(error);
+    }
+}
 
 
 

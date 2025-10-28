@@ -7,8 +7,9 @@ const storage = multer.diskStorage({
     cb(null, 'img'); // Répertoire de destination
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname); // Nom du fichier
+    req.body.image =  new String(Date.now() + '-' + file.originalname).replaceAll(' ',''); // Nom du fichier
+    cb(null, req.body.image)
   }
 });
 
-export const img = multer({ storage : storage });
+export const upload = multer({ storage : storage });

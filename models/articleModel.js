@@ -59,27 +59,27 @@ export const registerArticle = async (articleData) => {
 };
 
 
-export const registerImage = async (image) => {
+// export const registerImage = async (image) => {
 
-    const RegisterImg = "INSERT INTO Image (image) value (?)";
+//     const RegisterImg = "INSERT INTO Image (image) value (?)";
 
-    try {
+//     try {
 
-        const [result] = await bdd.query(RegisterImg, [image]);
+//         const [result] = await bdd.query(RegisterImg, [image]);
 
-        const imgId = result.insertId;
+//         const imgId = result.insertId;
 
-        return imgId;
+//         return imgId;
 
-    } catch (error) {
+//     } catch (error) {
 
-        console.error("Erreur lors de l'insertion de l'article", error);
-        throw error;  // Relancer l'erreur pour gestion dans le contrôleur
+//         console.error("Erreur lors de l'insertion de l'article", error);
+//         throw error;  // Relancer l'erreur pour gestion dans le contrôleur
 
-    }
+//     }
 
 
-}
+// }
 
 export const registerProteuse = (artId, imgId ) => {
     console.log(artId, imgId);
@@ -90,11 +90,11 @@ export const registerProteuse = (artId, imgId ) => {
 
 }
 
-export const articleGet = () => {
+export const articleGet = (idImage) => {
 
-    const listArticle = " SELECT idArticle, nomArticle, prix, dimension, description, categorieId, nomCategorie, idImage, image from Image JOIN Porteuse on imageId = idImage JOIN Article on idArticle = articleId JOIN Categorie on categorieId = idCategorie ";
+    const infoArticle = " SELECT idArticle, nomArticle, prix, dimension, description, categorieId, nomCategorie, idImage, image, imageId, articleId from Image JOIN Porteuse on imageId = idImage JOIN Article on idArticle = articleId JOIN Categorie on categorieId = idCategorie where idImage = ? ";
 
-    return bdd.query(listArticle)
+    return bdd.query(infoArticle)
 
 }
 
@@ -106,13 +106,28 @@ export const articleUpdate = (modifyData) => {
    
 }
 
-export const imageUpdate = ( modifyImage) => {
+export const addGallery = (img) => {
 
-    const upImage = "UPDATE Image SET image = ? where idImage = (?);";
+    const addGallery = "INSERT INTO Image (image) VALUE (?)";
 
-    return bdd.query(upImage,[ modifyImage.image, modifyImage.idImage]);
+    return bdd.query(addGallery,[img.image]);
 
 }
+
+export const getGallery = () => {
+
+    const listeImage = "SELECT idImage, image FROM image";
+
+    return bdd.query(listeImage);
+}
+
+// export const getCarouselImg = () => {
+
+//     const carouselImg = " SELECT idImage, image, description , nomArticle from image JOIN Porteuse on imageId = idImage JOIN Article on idArticle = articleId ";
+
+//     return bdd.query(carouselImg)
+
+// }
 
 export const articleDelete = (idArticle) => {
 
@@ -130,10 +145,9 @@ export const porteuseDelete = (idArticle) => {
 
 }
 
-export const getCarouselImg = () => {
+export const imageDelete = (idImage) => {
 
-    const carouselImg = " SELECT idImage, image, description , nomArticle from image JOIN Porteuse on imageId = idImage JOIN Article on idArticle = articleId ";
+    const deleteImage = "DELETE FROM image where idImage = ?";
 
-    return bdd.query(carouselImg)
-
+    return bdd.query(deleteImage, [idImage]);
 }

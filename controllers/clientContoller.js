@@ -59,14 +59,13 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-
         // appel de la fonction loginUser du modèle userModels
         // cette fonction permet de récupérer les données de l'utilisateur à partir de son mail
         const [result] = await clientModel.login(email);
-        // console.log(result);
+        // console.log("tata", result);
 
         const clientData = result[0]
-        // console.log(clientData);
+        // console.log("toto", clientData);
 
         if (result) {
 
